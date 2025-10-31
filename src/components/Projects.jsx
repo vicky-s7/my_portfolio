@@ -6,7 +6,7 @@ const projects = [
     name: "Portfolio Website",
     description: "My personal portfolio built with React, Vite, and Tailwind CSS.",
     live: "#",
-    code: "",
+    code: "https://github.com/vicky-s7/my_portfolio",
   },
   {
     name: "",
