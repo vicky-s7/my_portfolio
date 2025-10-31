@@ -1,10 +1,40 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin, FaEnvelope } from "react-icons/fa";
+import emailjs from "@emailjs/browser";
 
 const Contact = () => {
+  const form = useRef();
+  const [status, setStatus] = useState("");
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+    setStatus("Sending...");
+
+    emailjs
+      .sendForm(
+        "service_1ds2b3l",
+        "template_zxmet8s",
+        form.current,
+        "23YQ5zf1ijzguKDKa"
+      )
+      .then(
+        () => {
+          setStatus("Message sent successfully ✅");
+          form.current.reset();
+        },
+        (error) => {
+          console.error(error);
+          setStatus("Failed to send message ❌ Please try again.");
+        }
+      );
+  };
+
   return (
-    <section id="contact" className="py-20 px-6 text-center bg-black text-white">
+    <section
+      id="contact"
+      className="py-20 px-6 text-center bg-black text-white"
+    >
       <motion.h2
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -15,20 +45,30 @@ const Contact = () => {
         <span className="block w-24 h-1 bg-red-500 mx-auto mt-2"></span>
       </motion.h2>
 
-      <form className="max-w-md mx-auto flex flex-col space-y-4">
+      <form
+        ref={form}
+        onSubmit={sendEmail}
+        className="max-w-md mx-auto flex flex-col space-y-4"
+      >
         <input
           type="text"
+          name="name"
           placeholder="Name"
+          required
           className="p-3 bg-neutral-900 border border-red-500/40 rounded-md focus:outline-none focus:border-red-500 text-white placeholder-gray-400 transition-colors"
         />
         <input
           type="email"
+          name="email"
           placeholder="Email"
+          required
           className="p-3 bg-neutral-900 border border-red-500/40 rounded-md focus:outline-none focus:border-red-500 text-white placeholder-gray-400 transition-colors"
         />
         <textarea
+          name="message"
           rows="4"
           placeholder="Message"
+          required
           className="p-3 bg-neutral-900 border border-red-500/40 rounded-md focus:outline-none focus:border-red-500 text-white placeholder-gray-400 transition-colors"
         ></textarea>
 
@@ -38,6 +78,9 @@ const Contact = () => {
         >
           Send Message
         </button>
+        {status && (
+          <p className="text-sm mt-3 text-gray-300">{status}</p>
+        )}
       </form>
 
       <div className="flex justify-center gap-8 text-2xl mt-10">
